@@ -37,7 +37,7 @@
 				$data3 = "<div class=\"calendar_item\">";
 				if (function_exists($daycallback))  $data3 .= $daycallback($curryear, $currmonth, $currday, $data2);
 				else if ($data2 !== false)  $data3 .= $data2;
-				else  $data3 .= "<div class=\"calendar_item_date\">" . $currday . "</div>";
+				else  $data3 .= "<div class=\"calendar_item_date\">" . (int)$currday . "</div>";
 				$data3 .= "</div>";
 				$rows2[] = $data3;
 
@@ -59,6 +59,8 @@
 			if (function_exists($monthcallback))  $monthcallback($field, $curryear, $currmonth);
 
 			$contentopts["fields"][] = $field;
+
+			$rows = array();
 		}
 	}
 ?>
