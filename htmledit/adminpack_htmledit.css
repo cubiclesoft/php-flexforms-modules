@@ -1,0 +1,14 @@
+blockquote {
+	padding-left: 4px;
+	border-left: 2px solid gray;
+}
+
+a[href] {
+	color: #2E9DF7;
+	text-decoration: none;
+}
+
+a[href]:hover {
+	color: #2399ED;
+	text-decoration: underline;
+}
