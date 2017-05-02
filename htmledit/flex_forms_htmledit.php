@@ -2,28 +2,23 @@
 	// Add visual HTML editing via TinyMCE.  It's NOT my favorite visual HTML editor, but it works.
 	// (C) 2017 CubicleSoft.  All Rights Reserved.
 
-	class BB_AdminPack_HTMLEdit
+	class FlexForms_HTMLEdit
 	{
 		public static function Init(&$state, &$options)
 		{
-			$state["modules_htmledit"] = false;
+			if (!isset($state["modules_htmledit_tinymce"]))  $state["modules_htmledit_tinymce"] = false;
 		}
 
-		public static function FieldType(&$state, $num, &$field)
+		public static function FieldType(&$state, $num, &$field, $id)
 		{
 			if ($field["type"] === "textarea" && isset($field["html"]) && $field["html"])
 			{
-				$id = "f" . $num . "_" . $field["name"];
-
-				// Queue up the necessary Javascript for later output.
-				ob_start();
-				if ($state["modules_htmledit"] === false)
+				if ($state["modules_htmledit_tinymce"] === false)
 				{
-?>
-<script type="text/javascript" src="<?php echo htmlspecialchars($state["rooturl"] . "/" . $state["supportpath"] . "/tinymce/tinymce.min.js"); ?>"></script>
-<?php
+					// While TinyMCE itself doesn't require jQuery, the code later on does.
+					$state["js"]["modules-htmledit-tinymce"] = array("mode" => "src", "dependency" => "jquery", "src" => $state["supporturl"] . "/tinymce/tinymce.min.js", "detect" => "tinymce");
 
-					$state["modules_htmledit"] = "";
+					$state["modules_htmledit_tinymce"] = true;
 				}
 
 				$options = array(
@@ -34,7 +29,7 @@
 					"autoresize_max_height" => 600,
 					"autoresize_bottom_margin" => 0,
 					"content_css" => array(
-						$state["rooturl"] . "/" . $state["supportpath"] . "/adminpack_htmledit.css"
+						$state["supporturl"] . "/flex_forms_htmledit.css"
 					)
 				);
 
@@ -45,8 +40,9 @@
 					foreach ($field["html_options"] as $key => $val)  $options[$key] = $val;
 				}
 
+				// Queue up the necessary Javascript for later output.
+				ob_start();
 ?>
-			<script type="text/javascript">
 			jQuery(function() {
 				var options = <?php echo json_encode($options, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); ?>;
 
@@ -66,24 +62,17 @@
 
 				tinymce.init(options);
 			});
-			</script>
 <?php
-				$state["modules_htmledit"] .= ob_get_contents();
+				$state["js"][$id] = array("mode" => "inline", "dependency" => "modules-htmledit-tinymce", "src" => ob_get_contents());
 				ob_end_clean();
 			}
-		}
-
-		public static function Finalize(&$state)
-		{
-			if ($state["modules_htmledit"] !== false)  echo $state["modules_htmledit"];
 		}
 	}
 
 	// Register form handlers.
-	if (function_exists("BB_RegisterPropertyFormHandler"))
+	if (is_callable("FlexForms::RegisterFormHandler"))
 	{
-		BB_RegisterPropertyFormHandler("init", "BB_AdminPack_HTMLEdit::Init");
-		BB_RegisterPropertyFormHandler("field_type", "BB_AdminPack_HTMLEdit::FieldType");
-		BB_RegisterPropertyFormHandler("finalize", "BB_AdminPack_HTMLEdit::Finalize");
+		FlexForms::RegisterFormHandler("init", "FlexForms_HTMLEdit::Init");
+		FlexForms::RegisterFormHandler("field_type", "FlexForms_HTMLEdit::FieldType");
 	}
 ?>

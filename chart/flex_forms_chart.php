@@ -2,33 +2,36 @@
 	// Add visually appealing charts for dashboards/reports.
 	// (C) 2017 CubicleSoft.  All Rights Reserved.
 
-	class BB_AdminPack_Chart
+	class FlexForms_Chart
 	{
 		public static function Init(&$state, &$options)
 		{
-			$state["modules_chartused"] = false;
+			if (!isset($state["modules_chart"]))  $state["modules_chart"] = false;
 		}
 
-		public static function FieldType(&$state, $num, &$field)
+		public static function FieldType(&$state, $num, &$field, $id)
 		{
 			if ($field["type"] === "chart")
 			{
-				$id = "f" . $num . "_chart";
+				$id .= "_chart";
 
 ?>
 <div id="<?php echo htmlspecialchars($id); ?>"></div>
 <?php
-				if (!$state["modules_chartused"])
+				if ($state["modules_chart"] === false)
 				{
+					$state["css"]["modules-chart-c3"] = array("mode" => "link", "dependency" => false, "src" => $state["supporturl"] . "/c3.css");
+					$state["js"]["modules-chart-d3"] = array("mode" => "src", "dependency" => false, "src" => $state["supporturl"] . "/d3-3.5.17.min.js", "detect" => "d3");
+					$state["js"]["modules-chart-c3"] = array("mode" => "src", "dependency" => "modules-chart-d3", "src" => $state["supporturl"] . "/c3-0.4.11.min.js", "detect" => "c3");
+
+					ob_start();
 ?>
-<link rel="stylesheet" href="<?php echo htmlspecialchars($state["rooturl"] . "/" . $state["supportpath"] . "/c3.css"); ?>" type="text/css" media="all" />
-<script type="text/javascript" src="<?php echo htmlspecialchars($state["rooturl"] . "/" . $state["supportpath"] . "/d3-3.5.17.min.js"); ?>"></script>
-<script type="text/javascript" src="<?php echo htmlspecialchars($state["rooturl"] . "/" . $state["supportpath"] . "/c3-0.4.11.min.js"); ?>"></script>
-<script type="text/javascript">
-var adminpack_module_c3_charts = {};
-</script>
+FlexForms.modules.c3_charts = {};
 <?php
-					$state["modules_chartused"] = true;
+					$state["js"]["modules-chart-c3-charts"] = array("mode" => "inline", "dependency" => "modules-chart-c3", "src" => ob_get_contents(), "detect" => "FlexForms.modules.c3_charts");
+					ob_end_clean();
+
+					$state["modules_chart"] = true;
 				}
 
 				$options = array(
@@ -85,12 +88,13 @@ var adminpack_module_c3_charts = {};
 					{
 						$parts = explode(".", $key);
 
-						self::SetNestedPathValue($options, $parts, $val);
+						FlexForms::SetNestedPathValue($options, $parts, $val);
 					}
 				}
 
+				// Queue up the necessary Javascript for later output.
+				ob_start();
 ?>
-<script type="text/javascript">
 (function() {
 	var options = <?php echo json_encode($options, JSON_UNESCAPED_SLASHES); ?>;
 <?php
@@ -107,32 +111,19 @@ var adminpack_module_c3_charts = {};
 				}
 ?>
 
-	adminpack_module_c3_charts['<?php echo BB_JSSafe($id); ?>'] = c3.generate(options);
+	FlexForms.modules.c3_charts['<?php echo FlexForms::JSSafe($id); ?>'] = c3.generate(options);
 })();
-</script>
 <?php
+				$state["js"][$id] = array("mode" => "inline", "dependency" => "modules-chart-c3-charts", "src" => ob_get_contents());
+				ob_end_clean();
 			}
-		}
-
-		public static function SetNestedPathValue(&$data, $pathparts, $val)
-		{
-			$curr = &$data;
-			foreach ($pathparts as $key)
-			{
-				if (!isset($curr[$key]))  $curr[$key] = array();
-
-				$curr = &$curr[$key];
-			}
-
-			$curr = $val;
 		}
 	}
 
-
 	// Register form handlers.
-	if (function_exists("BB_RegisterPropertyFormHandler"))
+	if (is_callable("FlexForms::RegisterFormHandler"))
 	{
-		BB_RegisterPropertyFormHandler("init", "BB_AdminPack_Chart::Init");
-		BB_RegisterPropertyFormHandler("field_type", "BB_AdminPack_Chart::FieldType");
+		FlexForms::RegisterFormHandler("init", "FlexForms_Chart::Init");
+		FlexForms::RegisterFormHandler("field_type", "FlexForms_Chart::FieldType");
 	}
 ?>

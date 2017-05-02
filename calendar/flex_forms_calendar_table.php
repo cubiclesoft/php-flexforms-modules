@@ -2,7 +2,7 @@
 	// Add one or more calendar months using table fields.
 	// (C) 2017 CubicleSoft.  All Rights Reserved.
 
-	function BB_AddCalendarMonthTableFields(&$contentopts, $startyear, $startmonth, $endyear, $endmonth, $cols, $data = array(), $monthcallback = "", $daycallback = "")
+	function FF_AddCalendarMonthTableFields(&$contentopts, $startyear, $startmonth, $endyear, $endmonth, $cols, $data = array(), $monthcallback = "", $daycallback = "")
 	{
 		$startyear = (int)$startyear;
 		$startmonth = (int)$startmonth;
@@ -67,8 +67,8 @@
 		}
 	}
 
-	// Add 'calendar' table support for newer Admin Pack property forms.
-	class BB_AdminPack_CalendarTable
+	// Add 'calendar' table support for the newer FlexForms class.
+	class FlexForms_CalendarTable
 	{
 		public static function Init(&$state, &$options)
 		{
@@ -84,7 +84,7 @@
 						{
 							// Replace this field with one or more tables containing monthly calendar data.
 							$contentopts = array("fields" => array());
-							BB_AddCalendarMonthTableFields($contentopts, (isset($field["startyear"]) ? $field["startyear"] : date("Y")), (isset($field["startmonth"]) ? $field["startmonth"] : date("n")), (isset($field["startyear"]) ? $field["startyear"] : date("Y")), (isset($field["endmonth"]) ? $field["endmonth"] : date("n")), (isset($field["cols"]) ? $field["cols"] : array("S", "M", "T", "W", "T", "F", "S")), (isset($field["data"]) ? $field["data"] : array()), (isset($field["monthcallback"]) ? $field["monthcallback"] : ""), (isset($field["daycallback"]) ? $field["daycallback"] : ""));
+							FF_AddCalendarMonthTableFields($contentopts, (isset($field["startyear"]) ? $field["startyear"] : date("Y")), (isset($field["startmonth"]) ? $field["startmonth"] : date("n")), (isset($field["startyear"]) ? $field["startyear"] : date("Y")), (isset($field["endmonth"]) ? $field["endmonth"] : date("n")), (isset($field["cols"]) ? $field["cols"] : array("S", "M", "T", "W", "T", "F", "S")), (isset($field["data"]) ? $field["data"] : array()), (isset($field["monthcallback"]) ? $field["monthcallback"] : ""), (isset($field["daycallback"]) ? $field["daycallback"] : ""));
 
 							if (isset($field["title"]))  $contentopts["fields"][0]["title"] = $field["title"];
 							if (isset($field["desc"]))  $contentopts["fields"][count($contentopts["fields"]) - 1]["desc"] = $field["desc"];
@@ -101,8 +101,8 @@
 		}
 	}
 
-	if (function_exists("BB_RegisterPropertyFormHandler"))
+	if (is_callable("FlexForms::RegisterFormHandler"))
 	{
-		BB_RegisterPropertyFormHandler("init", "BB_AdminPack_CalendarTable::Init");
+		FlexForms::RegisterFormHandler("init", "FlexForms_CalendarTable::Init");
 	}
 ?>
