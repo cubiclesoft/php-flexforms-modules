@@ -20,6 +20,7 @@ Available Modules
 * Chart - Adds a new field type (chart) that displays a variety of [C3.js charts](http://c3js.org/).
 * HTML Editor - Adds new options to the 'textarea' field type to convert a textarea into a TinyMCE HTML editor.  Filtering content submitted to the server for cross-site scripting (XSS) injection attempts is up to the developer, but using [TagFilter](https://github.com/cubiclesoft/ultimate-web-scraper) is highly recommended.
 * Stop Password Manager - Adds a new option to the 'password' field type that can be used to stop password managers from attempting to store entered passwords.
+* reCAPTCHA - Adds a new field type (recaptcha) that displays and can validate [Google reCAPTCHA](https://www.google.com/recaptcha/intro/).
 * Table Filter - Adds new options to the 'table' field type to display a search field at the top of the table to quickly find matching rows more efficiently than built-in browser searching.
 * Text Counter - Adds new options to the 'text' and 'textarea' field types to display a counter that shows the number of characters (or words) entered.
 
@@ -32,6 +33,7 @@ The following new field types are added:
 
 * calendar (via Calendar) - Replaces the input with one or more standard FlexForms tables to display a calendar.
 * chart (via Chart) - Displays [C3.js charts](http://c3js.org/).
+* recaptcha (via reCAPTCHA) - Displays a [Google reCAPTCHA](https://www.google.com/recaptcha/intro/).
 
 New type-specific options for array fields:
 
@@ -54,6 +56,9 @@ New type-specific options for array fields:
 * html_options (textarea + HTML editor) - An array of options to pass to [TinyMCE](https://www.tinymce.com/docs/configure/integration-and-setup/).
 * html_callbacks (textarea + HTML editor) - An array of Javascript callbacks to pass to [TinyMCE](https://www.tinymce.com/docs/configure/integration-and-setup/).
 * passwordmanager (password + Stop Password Manager) - A boolean indicating whether or not to allow web browser password managers to work.
+* sitekey (recaptcha) - A string containing a [site key](https://www.google.com/recaptcha/admin).
+* size (recaptcha) - A string containing a valid size (depends on the version and sitekey but "invisible" for Invisible reCAPTCHA and "normal" or "compact" for reCAPTCHA v2).
+* options (recaptcha) - An array of extra options to pass to [Invisible reCAPTCHA](https://developers.google.com/recaptcha/docs/invisible#render_param) or [reCAPTCHA v2](https://developers.google.com/recaptcha/docs/display#render_param).  Note that callback options won't work.
 * filter (table + Table Filter) - A boolean indicating whether or not to enable the table filter module on the table.
 * filter_options (table + Table Filter) - An array of options to pass to [FilterTable](https://github.com/sunnywalker/jQuery.FilterTable).
 * filter_callbacks (table + Table Filter) - An array of Javascript callbacks to pass to [FilterTable](https://github.com/sunnywalker/jQuery.FilterTable).
@@ -62,3 +67,69 @@ New type-specific options for array fields:
 * counter_callbacks (text/textarea + Text Counter) - An array of Javascript callbacks to pass to [TextCounter](https://github.com/cubiclesoft/php-flexforms-modules/tree/master/text-counter/jquery.textcounter.js).
 
 Example code for the various modules can be found in the Admin Pack [admin.php file](https://github.com/cubiclesoft/admin-pack/blob/master/admin.php).
+
+reCAPTCHA Module Example
+------------------------
+
+Since it doesn't really belong in Admin Pack, here's a brief example of using the reCAPTCHA module:
+
+```php
+<?php
+	require_once "support/flex_forms_recaptcha.php";
+
+	$errors = array();
+	if (isset($_REQUEST[$ff->GetHashedFieldName("name")]))
+	{
+		// ...
+
+		$result = FlexForms_reCAPTCHA::IsValid("[Your secret key goes here]");
+		if (!$result["success"])  $errors["recaptcha"] = $result["error"] . " (" . $result["errorcode"] . ")";
+
+		if (!count($errors))
+		{
+			// ...
+		}
+	}
+
+	// ...
+
+	// Make your own site and secret key:  https://www.google.com/recaptcha/admin
+
+	$contentopts = array(
+		"hashnames" => true,
+		"fields" => array(
+			// ...
+			array(
+				"title" => "Module:  Invisible reCAPTCHA",
+				"type" => "recaptcha",
+				"name" => "recaptcha",
+				"sitekey" => "[Your site key here]",
+				"size" => "invisible",
+				"desc" => "Description for reCAPTCHA."
+			)
+		),
+		"submit" => "Submit"
+	);
+
+	$ff->Generate($contentopts, $errors);
+?>
+```
+
+Even though the 'name' is not output, it is used for handling error message output.
+
+FlexForms_reCAPTCHA::IsValid($secretkey, $remoteip = true, $allowedhosts = true)
+--------------------------------------------------------------------------------
+
+Module:  reCAPTCHA
+
+Access:  public static
+
+Parameters:
+
+* $secretkey - A string containing a [secret key](https://www.google.com/recaptcha/admin).
+* $remoteip - A boolean that determines whether or not to pass the remote IP address of the client to reCAPTCHA or a string or IPAddr compatible array containing a specific IP address to pass (Default is true).
+* $allowedhosts - A boolean to allow all hosts or a string or an array to only allow specific hosts to be valid (Default is true).
+
+Returns:  A standard array of information.
+
+This function sends the reCAPTCHA code in $_REQUEST["g-recaptcha-response"] to the Google reCAPTCHA verification server.  The included HTTP, WebBrowser, and IPAddr classes are loaded as needed.  The defaults are generally good enough but customizations of the sitekey/secretkey (e.g. removing domain restrictions, proxying requests) may require calling this function differently.
