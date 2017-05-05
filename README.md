@@ -66,7 +66,10 @@ New type-specific options for array fields:
 * counter_options (text/textarea + Text Counter) - An array of options to pass to [TextCounter](https://github.com/cubiclesoft/php-flexforms-modules/tree/master/text-counter/jquery.textcounter.js).
 * counter_callbacks (text/textarea + Text Counter) - An array of Javascript callbacks to pass to [TextCounter](https://github.com/cubiclesoft/php-flexforms-modules/tree/master/text-counter/jquery.textcounter.js).
 
-Example code for the various modules can be found in the Admin Pack [admin.php file](https://github.com/cubiclesoft/admin-pack/blob/master/admin.php).
+Examples
+--------
+
+Example code showing how to use most modules can be found in the Admin Pack [admin.php file](https://github.com/cubiclesoft/admin-pack/blob/master/admin.php).
 
 reCAPTCHA Module Example
 ------------------------
@@ -75,7 +78,14 @@ Since it doesn't really belong in Admin Pack, here's a brief example of using th
 
 ```php
 <?php
+	// This example is derived from:
+	//   https://github.com/cubiclesoft/php-flexforms/blob/master/docs/flex_forms.md
+
+	require_once "support/str_basics.php";
+	require_once "support/flex_forms.php";
 	require_once "support/flex_forms_recaptcha.php";
+
+	// ...
 
 	$errors = array();
 	if (isset($_REQUEST[$ff->GetHashedFieldName("name")]))
