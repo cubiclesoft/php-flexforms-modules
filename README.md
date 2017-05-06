@@ -125,7 +125,7 @@ Since it doesn't really belong in Admin Pack, here's a brief example of using th
 ?>
 ```
 
-Even though the 'name' is not output, it is used for handling error message output.
+Even though the 'recaptcha' name attribute is not output, it is used for displaying error messages regarding reCAPTCHA submissions.
 
 FlexForms_reCAPTCHA::IsValid($secretkey, $remoteip = true, $allowedhosts = true)
 --------------------------------------------------------------------------------
@@ -142,4 +142,4 @@ Parameters:
 
 Returns:  A standard array of information.
 
-This function sends the reCAPTCHA code in $_REQUEST["g-recaptcha-response"] to the Google reCAPTCHA verification server.  The included HTTP, WebBrowser, and IPAddr classes are loaded as needed.  The defaults are generally good enough but customizations of the sitekey/secretkey (e.g. removing domain restrictions, proxying requests) may require calling this function differently.
+This function sends the reCAPTCHA code in $_REQUEST["g-recaptcha-response"] to the Google reCAPTCHA verification server.  The included HTTP, WebBrowser, and IPAddr classes are loaded as needed.  The defaults are generally good enough but customizations of the sitekey/secretkey (e.g. removing domain restrictions, proxying requests) may require calling this function with corrected options for `$remoteip` and `$allowedhosts` to guarantee that the CAPTCHA was solved by a valid IP address and hostname.
