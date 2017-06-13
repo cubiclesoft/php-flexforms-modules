@@ -6,6 +6,7 @@
 		return this.each(function() {
 			var $this = $(this);
 
+			$this.addClass('no-print');
 			$this.attr('data-background-color', $this.css('background-color'));
 			$this.css('background-color', $this.css('color'));
 			$this.attr('type', 'text');

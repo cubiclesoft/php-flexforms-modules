@@ -53,10 +53,15 @@
 
 			$rows[] = $rows2;
 
+			$cardtemplate = "";
+			foreach ($cols as $num => $col)  $cardtemplate .= "<div class=\"calendar_day_of_week\">" . htmlspecialchars($cols[$num]) . "</div>%" . ($num + 1);
+
 			$field = array(
 				"type" => "table",
 				"cols" => $cols,
-				"rows" => $rows
+				"rows" => $rows,
+				"card" => $cardtemplate,
+				"bodyscroll" => true
 			);
 
 			if (is_callable($monthcallback))  call_user_func_array($monthcallback, array(&$field, $curryear, $currmonth));

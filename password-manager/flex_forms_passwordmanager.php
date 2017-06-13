@@ -27,7 +27,7 @@
 				jQuery('#<?php echo FlexForms::JSSafe($id); ?>').StopPasswordManager();
 			});
 <?php
-				$state["js"][$id] = array("mode" => "inline", "dependency" => "modules-passwordmanager", "src" => ob_get_contents());
+				$state["js"]["modules-passwordmanager|" . $id] = array("mode" => "inline", "dependency" => "modules-passwordmanager", "src" => ob_get_contents());
 				ob_end_clean();
 			}
 		}

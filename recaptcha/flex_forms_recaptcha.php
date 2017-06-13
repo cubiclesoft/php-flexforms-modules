@@ -142,11 +142,11 @@ FlexForms.modules.reCAPTCHA_renderinfo.push({
 ?>
 });
 <?php
-				$state["js"][$id] = array("mode" => "inline", "dependency" => "modules-recaptcha-init", "src" => ob_get_contents());
+				$state["js"]["modules-recaptcha|" . $id] = array("mode" => "inline", "dependency" => "modules-recaptcha-init", "src" => ob_get_contents());
 				ob_end_clean();
 
 				// Always update the dependency to the most recent ID.
-				$state["js"]["modules-recaptcha"] = array("mode" => "src", "dependency" => $id, "src" => "https://www.google.com/recaptcha/api.js?onload=FlexForms_modules_reCAPTCHA_Init&render=explicit", "detect" => "grecaptcha");
+				$state["js"]["modules-recaptcha"] = array("mode" => "src", "dependency" => "modules-recaptcha|" . $id, "src" => "https://www.google.com/recaptcha/api.js?onload=FlexForms_modules_reCAPTCHA_Init&render=explicit", "detect" => "grecaptcha");
 			}
 		}
 	}

@@ -9,60 +9,73 @@
 			if (!isset($state["modules_table_filter"]))  $state["modules_table_filter"] = false;
 		}
 
-		public static function TableRow(&$state, $num, &$field, $idbase, $type, $rownum, &$trattrs, &$colattrs, &$row)
+		public static function FieldType(&$state, $num, &$field, $id)
 		{
-			if ($state["formtables"] && isset($field["filter"]) && $field["filter"])
+			if ($field["type"] == "table" && isset($field["filter"]) && $field["filter"])
 			{
-				if ($type == "head")
+				if (!isset($field["filterwidth"]))  $field["filterwidth"] = "20em";
+				if (!isset($field["filterplaceholder"]))  $field["filterplaceholder"] = FlexForms::FFTranslate("Search this table");
+				if (!isset($field["class"]))  $field["class"] = "ff_tablefilter";
+				else  $field["class"] .= " ff_tablefilter";
+
+?>
+			<div class="formitemdata">
+				<div class="textitemwrap tablefiltersearchwrap"><input class="text"<?php if (isset($field["filterwidth"]))  echo " style=\"" . ($state["responsive"] ? "max-" : "") . "width: " . htmlspecialchars($field["filterwidth"]) . ";\""; ?> type="text" id="<?php echo htmlspecialchars($id); ?>_tablefilter_search" placeholder="<?php echo htmlspecialchars($field["filterplaceholder"]); ?>"<?php if ($state["autofocused"] === $id)  echo " autofocus"; ?> /></div>
+			</div>
+<?php
+
+				if ($state["modules_table_filter"] === false)
 				{
-					if ($state["modules_table_filter"] === false)
-					{
-						ob_start();
+					ob_start();
 ?>
 <style type="text/css">
 td.ff_filter_highlight { background-color: #FFFFCC; background-color: rgba(255, 255, 0, 0.1); }
 </style>
 <?php
 
-						$state["css"]["modules-table-filter"] = array("mode" => "inline", "dependency" => false, "src" => ob_get_contents());
-						ob_end_clean();
+					$state["css"]["modules-table-filter"] = array("mode" => "inline", "dependency" => false, "src" => ob_get_contents());
+					ob_end_clean();
 
-						$state["js"]["modules-table-filter-bindwithdelay"] = array("mode" => "src", "dependency" => "jquery", "src" => $state["supporturl"] . "/bindWithDelay.js", "detect" => "jQuery.fn.bindWithDelay");
-						$state["js"]["modules-table-filter"] = array("mode" => "src", "dependency" => "modules-table-filter-bindwithdelay", "src" => $state["supporturl"] . "/jquery.filtertable.min.js", "detect" => "jQuery.fn.filterTable");
+					$state["js"]["modules-table-filter-bindwithdelay"] = array("mode" => "src", "dependency" => "jquery", "src" => $state["supporturl"] . "/bindWithDelay.js", "detect" => "jQuery.fn.bindWithDelay");
+					$state["js"]["modules-table-filter"] = array("mode" => "src", "dependency" => "modules-table-filter-bindwithdelay", "src" => $state["supporturl"] . "/jquery.filtertable.min.js", "detect" => "jQuery.fn.filterTable");
 
-						ob_start();
+					ob_start();
 ?>
-FlexForms.modules.TableFilter_Stripe = function(term, table) {
-	table.find('tr').removeClass('altrow').filter(':visible:odd').addClass('altrow');
+FlexForms.modules.TableFilter_Finalize = function(term, table) {
+	table.find('tr').removeClass('altrow').removeClass('lastrow').filter(':visible:odd').addClass('altrow').filter(':last');
+	table.find('tr:visible:last').addClass('lastrow');
+
+	table.trigger('table:datachanged');
 }
 <?php
-						$state["js"]["modules-table-filter-stripe"] = array("mode" => "inline", "dependency" => "modules-table-filter", "src" => ob_get_contents(), "detect" => "FlexForms.modules.TableFilter_Stripe");
-						ob_end_clean();
+					$state["js"]["modules-table-filter-stripe"] = array("mode" => "inline", "dependency" => "modules-table-filter", "src" => ob_get_contents(), "detect" => "FlexForms.modules.TableFilter_Finalize");
+					ob_end_clean();
 
-						$state["modules_table_filter"] = true;
-					}
+					$state["modules_table_filter"] = true;
+				}
 
-					$options = array(
-						"highlightClass" => "ff_filter_highlight",
-						"minRows" => 0
-					);
+				$options = array(
+					"highlightClass" => "ff_filter_highlight",
+					"minRows" => 0,
+					"inputSelector" => "#" . $id . "_tablefilter_search"
+				);
 
-					// Allow each filterTable instance to be fully customized beyond basic support.
-					// Valid options:  https://github.com/sunnywalker/jQuery.FilterTable
-					if (isset($field["filter_options"]))
-					{
-						foreach ($field["filter_options"] as $key => $val)  $options[$key] = $val;
-					}
+				// Allow each filterTable instance to be fully customized beyond basic support.
+				// Valid options:  https://github.com/sunnywalker/jQuery.FilterTable
+				if (isset($field["filter_options"]))
+				{
+					foreach ($field["filter_options"] as $key => $val)  $options[$key] = $val;
+				}
 
-					// Queue up the necessary Javascript for later output.
-					ob_start();
+				// Queue up the necessary Javascript for later output.
+				ob_start();
 ?>
 			if (jQuery.fn.filterTable)
 			{
 				var options = <?php echo json_encode($options, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); ?>;
 <?php
 				if (!isset($field["filter_callbacks"]))  $field["filter_callbacks"] = array();
-				$field["filter_callbacks"]["callback"] = "FlexForms.modules.TableFilter_Stripe";
+				$field["filter_callbacks"]["callback"] = "FlexForms.modules.TableFilter_Finalize";
 
 				if (isset($field["filter_callbacks"]))
 				{
@@ -75,18 +88,17 @@ FlexForms.modules.TableFilter_Stripe = function(term, table) {
 				}
 ?>
 
-				jQuery('#<?php echo FlexForms::JSSafe($idbase); ?>').filterTable(options);
+				jQuery('#<?php echo FlexForms::JSSafe($id); ?>_table').filterTable(options);
 
-				FlexForms.modules.TableFilter_Stripe('', jQuery('#<?php echo FlexForms::JSSafe($idbase); ?>'));
+				jQuery('#<?php echo FlexForms::JSSafe($id); ?>_tablefilter_search').keyup();
 			}
 			else
 			{
 				alert('<?php echo FlexForms::JSSafe(FlexForms::FFTranslate("Warning:  Missing jQuery filterTable plugin for table searcing/filtering.\n\nThis feature requires the FlexForms table-filter module.")); ?>');
 			}
 <?php
-					$state["js"][$id] = array("mode" => "inline", "dependency" => "modules-table-filter-stripe", "src" => ob_get_contents());
-					ob_end_clean();
-				}
+				$state["js"]["modules-table-filter|" . $id] = array("mode" => "inline", "dependency" => "modules-table-filter-stripe", "src" => ob_get_contents());
+				ob_end_clean();
 			}
 		}
 	}
@@ -95,6 +107,6 @@ FlexForms.modules.TableFilter_Stripe = function(term, table) {
 	if (is_callable("FlexForms::RegisterFormHandler"))
 	{
 		FlexForms::RegisterFormHandler("init", "FlexForms_TableFilter::Init");
-		FlexForms::RegisterFormHandler("table_row", "FlexForms_TableFilter::TableRow");
+		FlexForms::RegisterFormHandler("field_type", "FlexForms_TableFilter::FieldType");
 	}
 ?>

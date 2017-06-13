@@ -53,8 +53,6 @@
 				var options = <?php echo json_encode($options, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); ?>;
 
 <?php
-				if (!isset($field["counter_callbacks"]))  $field["counter_callbacks"] = array();
-
 				if (isset($field["counter_callbacks"]))
 				{
 					foreach ($field["counter_callbacks"] as $key => $val)
@@ -69,7 +67,7 @@
 				jQuery('#<?php echo FlexForms::JSSafe($id); ?>').TextCounter(options);
 			});
 <?php
-				$state["js"][$id] = array("mode" => "inline", "dependency" => "modules-textcounter", "src" => ob_get_contents());
+				$state["js"]["modules-textcounter|" . $id] = array("mode" => "inline", "dependency" => "modules-textcounter", "src" => ob_get_contents());
 				ob_end_clean();
 			}
 		}

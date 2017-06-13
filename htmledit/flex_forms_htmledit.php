@@ -25,7 +25,7 @@
 					"selector" => "#" . $id,
 					"menubar" => false,
 					"plugins" => "lists link paste contextmenu textpattern autolink autoresize",
-					"toolbar" => "bold italic superscript subscript undo redo paste link numlist bullist indent outdent | formatselect blockquote",
+					"toolbar" => "bold italic superscript subscript undo redo paste | link numlist bullist indent outdent | formatselect blockquote",
 					"autoresize_max_height" => 600,
 					"autoresize_bottom_margin" => 0,
 					"content_css" => array(
@@ -63,7 +63,7 @@
 				tinymce.init(options);
 			});
 <?php
-				$state["js"][$id] = array("mode" => "inline", "dependency" => "modules-htmledit-tinymce", "src" => ob_get_contents());
+				$state["js"]["modules-htmledit-tinymce|" . $id] = array("mode" => "inline", "dependency" => "modules-htmledit-tinymce", "src" => ob_get_contents());
 				ob_end_clean();
 			}
 		}

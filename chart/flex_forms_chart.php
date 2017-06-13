@@ -39,7 +39,7 @@ FlexForms.modules.c3_charts = {};
 				);
 
 				$size = array();
-				if (isset($field["width"]))  $size["width"] = (int)$field["width"];
+				if (isset($field["width"]) && !$state["responsive"])  $size["width"] = (int)$field["width"];
 				if (isset($field["height"]))  $size["height"] = (int)$field["height"];
 				if (count($size))  $options["size"] = $size;
 
@@ -114,7 +114,7 @@ FlexForms.modules.c3_charts = {};
 	FlexForms.modules.c3_charts['<?php echo FlexForms::JSSafe($id); ?>'] = c3.generate(options);
 })();
 <?php
-				$state["js"][$id] = array("mode" => "inline", "dependency" => "modules-chart-c3-charts", "src" => ob_get_contents());
+				$state["js"]["modules-chart-c3-charts|" . $id] = array("mode" => "inline", "dependency" => "modules-chart-c3-charts", "src" => ob_get_contents());
 				ob_end_clean();
 			}
 		}
