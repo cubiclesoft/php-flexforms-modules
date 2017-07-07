@@ -32,7 +32,7 @@
 			var CounterHandler = function(e) {
 				var val = $this.val();
 				var vallen = (settings.unit === 'words' ? val.split(/\s+/).length : val.length);
-				var valid = vallen <= settings.limit;
+				var valid = (settings.limit == 0 || vallen <= settings.limit);
 
 				dest.removeClass(settings.okayClass).removeClass(settings.errorClass);
 				dest.addClass(valid ? settings.okayClass : settings.errorClass);
