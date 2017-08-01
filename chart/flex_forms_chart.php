@@ -16,7 +16,9 @@
 				$id .= "_chart";
 
 ?>
-<div id="<?php echo htmlspecialchars($id); ?>"></div>
+<div class="formitemdata">
+	<div id="<?php echo htmlspecialchars($id); ?>"></div>
+</div>
 <?php
 				if ($state["modules_chart"] === false)
 				{
