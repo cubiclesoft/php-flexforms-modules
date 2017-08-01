@@ -18,6 +18,7 @@ Available Modules
 
 * Calendar - Adds a new field type (calendar) that replaces the input array with a set of standard FlexForms tables to display a calendar.
 * Chart - Adds a new field type (chart) that displays a variety of [C3.js charts](http://c3js.org/).
+* File Uploader - Adds new options to the 'file' field type to display a fancy file uploader that supports drag-and-drop, previews, client-side file naming, chunked uploads, and more.
 * HTML Editor - Adds new options to the 'textarea' field type to convert a textarea into a TinyMCE HTML editor.  Filtering content submitted to the server for cross-site scripting (XSS) injection attempts is up to the developer, but using [TagFilter](https://github.com/cubiclesoft/ultimate-web-scraper) is highly recommended.
 * Stop Password Manager - Adds a new option to the 'password' field type that can be used to stop password managers from attempting to store entered passwords.
 * reCAPTCHA - Adds a new field type (recaptcha) that displays and can validate [Google reCAPTCHA](https://www.google.com/recaptcha/intro/).
@@ -52,6 +53,11 @@ New type-specific options for array fields:
 * data (chart) - An array containing key-value pairs where values are arrays of values.
 * options (chart) - An array of options to pass to [C3.js](http://c3js.org/reference.html) (e.g. array("grid.x.show" => true, "zoom.enabled" => true)).
 * callbacks (chart) - An array of Javascript callbacks to pass to [C3.js](http://c3js.org/reference.html).
+* uploader (file + File Uploader) - A boolean indicating whether or not to replace the file input with a fancy file uploader.
+* maxchunk (file + File Uploader) - An integer containing the maximum amount of data, in bytes, to upload in chunked upload mode.
+* maxsize (file + File Uploader) - An integer containing the maximum amount of data, in bytes, to upload in normal upload mode.
+* uploader_options (file + File Uploader) - An array of options to pass to [Fancy File Uploader](https://github.com/cubiclesoft/jquery-fancyfileuploader).
+* uploader_callbacks (file + File Uploader) - An array of Javascript callbacks to pass to [Fancy File Uploader](https://github.com/cubiclesoft/jquery-fancyfileuploader).
 * html (textarea + HTML editor) - A boolean indicating whether or not to turn the textarea into a HTML editor.
 * html_options (textarea + HTML editor) - An array of options to pass to [TinyMCE](https://www.tinymce.com/docs/configure/integration-and-setup/).
 * html_callbacks (textarea + HTML editor) - An array of Javascript callbacks to pass to [TinyMCE](https://www.tinymce.com/docs/configure/integration-and-setup/).
