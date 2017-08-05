@@ -32,7 +32,7 @@
 
 				$options["params"]["fileuploader"] = "1";
 
-				if (isset($field["maxchunk"]))  $field["fileupload"]["maxChunkSize"] = floor($field["maxchunk"]);
+				if (isset($field["maxchunk"]))  $options["fileupload"]["maxChunkSize"] = floor($field["maxchunk"]);
 				else if (!isset($field["maxsize"]))  $options["maxfilesize"] = self::GetMaxUploadFileSize();
 				else  $options["maxfilesize"] = floor($field["maxsize"]);
 
