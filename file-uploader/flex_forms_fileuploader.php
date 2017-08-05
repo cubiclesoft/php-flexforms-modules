@@ -63,7 +63,7 @@ jQuery(function() {
 						$parts = explode(".", $key);
 
 ?>
-	options<?php foreach ($parts as $part)  echo "[" . $part . "]"; ?> = <?php echo $val; ?>;
+	options<?php foreach ($parts as $part)  echo "['" . $part . "']"; ?> = <?php echo $val; ?>;
 <?php
 					}
 				}
