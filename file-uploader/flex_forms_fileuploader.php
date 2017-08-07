@@ -86,9 +86,10 @@ jQuery(function() {
 
 		public static function GetMaxUploadFileSize()
 		{
-			$maxpostsize = self::ConvertUserStrToBytes(ini_get("post_max_size"));
-			$maxuploadsize = self::ConvertUserStrToBytes(ini_get("upload_max_filesize"));
+			$maxpostsize = floor(self::ConvertUserStrToBytes(ini_get("post_max_size")) * 3 / 4);
+			if ($maxpostsize > 4096)  $maxpostsize -= 4096;
 
+			$maxuploadsize = self::ConvertUserStrToBytes(ini_get("upload_max_filesize"));
 			if ($maxuploadsize < 1)  $maxuploadsize = ($maxpostsize < 1 ? -1 : $maxpostsize);
 
 			return ($maxpostsize < 1 ? $maxuploadsize : min($maxpostsize, $maxuploadsize));
@@ -143,12 +144,12 @@ jQuery(function() {
 				$vals = explode(" ", preg_replace('/\s+/', " ", str_replace(",", "", $_SERVER["HTTP_CONTENT_RANGE"])));
 				if (count($vals) === 2 && strtolower($vals[0]) === "bytes")
 				{
-					$vals = explode("/", trim(substr($vals[1], 0, $pos)));
+					$vals = explode("/", trim($vals[1]));
 					if (count($vals) === 2)
 					{
-						$vals = explode("-", trim(substr($vals[0], 0, $pos)));
+						$vals = explode("-", trim($vals[0]));
 
-						if (count($vals) === 2)  return (double)substr($vals[1], 0, $pos);
+						if (count($vals) === 2)  return (double)$vals[0];
 					}
 				}
 			}
