@@ -20,7 +20,7 @@
 
 ?>
 			<div class="formitemdata">
-				<div class="textitemwrap tablefiltersearchwrap"><input class="text"<?php if (isset($field["filterwidth"]))  echo " style=\"" . ($state["responsive"] ? "max-" : "") . "width: " . htmlspecialchars($field["filterwidth"]) . ";\""; ?> type="text" id="<?php echo htmlspecialchars($id); ?>_tablefilter_search" placeholder="<?php echo htmlspecialchars($field["filterplaceholder"]); ?>"<?php if ($state["autofocused"] === $id)  echo " autofocus"; ?> /></div>
+				<div class="textitemwrap tablefiltersearchwrap"<?php if (isset($field["filterwidth"]))  echo " style=\"" . ($state["responsive"] ? "max-" : "") . "width: " . htmlspecialchars($field["filterwidth"]) . ";\""; ?>><input class="text" type="text" id="<?php echo htmlspecialchars($id); ?>_tablefilter_search" placeholder="<?php echo htmlspecialchars($field["filterplaceholder"]); ?>"<?php if ($state["autofocused"] === $id)  echo " autofocus"; ?> /></div>
 			</div>
 <?php
 
