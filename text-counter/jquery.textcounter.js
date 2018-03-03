@@ -25,7 +25,7 @@
 
 		return this.each(function() {
 			var $this = $(this);
-			var dest = (settings.target === null ? $this.append('<div />') : $(settings.target));
+			var dest = (settings.target === null ? $this.append($('<div>')) : $(settings.target));
 
 			if (settings.target === null)  $this.data('textcountertarget', dest);
 
