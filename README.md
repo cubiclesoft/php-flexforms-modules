@@ -20,6 +20,7 @@ Available Modules
 * Chart - Adds a new field type (chart) that displays a variety of [C3.js charts](http://c3js.org/).
 * File Uploader - Adds new options to the 'file' field type to display a fancy file uploader that supports drag-and-drop, previews, client-side file naming, chunked uploads, and more.
 * HTML Editor - Adds new options to the 'textarea' field type to convert a textarea into a TinyMCE HTML editor.  Filtering content submitted to the server for cross-site scripting (XSS) injection attempts is up to the developer, but using [TagFilter](https://github.com/cubiclesoft/ultimate-web-scraper) is highly recommended.
+* Preview URL - Adds new options to all field types to show a preview dialog on click for supported MIME types.  Can preview images, audio, video, and 'iframe' content.  Applied to elements that have a 'data-preview-type' attribute which specifies the MIME type.
 * Stop Password Manager - Adds a new option to the 'password' field type that can be used to stop password managers from attempting to store entered passwords.
 * reCAPTCHA - Adds a new field type (recaptcha) that displays and can validate [Google reCAPTCHA](https://www.google.com/recaptcha/intro/).
 * Table Filter - Adds new options to the 'table' field type to display a search field at the top of the table to quickly find matching rows more efficiently than built-in browser searching.
@@ -61,6 +62,9 @@ New type-specific options for array fields:
 * html (textarea + HTML editor) - A boolean indicating whether or not to turn the textarea into a HTML editor.
 * html_options (textarea + HTML editor) - An array of options to pass to [TinyMCE](https://www.tinymce.com/docs/configure/integration-and-setup/).
 * html_callbacks (textarea + HTML editor) - An array of Javascript callbacks to pass to [TinyMCE](https://www.tinymce.com/docs/configure/integration-and-setup/).
+* previewurl (Preview URL) - A boolean that specifies whether or not to use preview URL.
+* previewurl_options (Preview URL) - An array of options to pass to [PreviewURL](https://github.com/cubiclesoft/php-flexforms-modules/tree/master/preview-url/jquery.previewurl.js).
+* previewurl_callbacks (Preview URL) - An array of Javascript callbacks to pass to [PreviewURL](https://github.com/cubiclesoft/php-flexforms-modules/tree/master/preview-url/jquery.previewurl.js).
 * passwordmanager (password + Stop Password Manager) - A boolean indicating whether or not to allow web browser password managers to work.
 * sitekey (recaptcha) - A string containing a [site key](https://www.google.com/recaptcha/admin).
 * size (recaptcha) - A string containing a valid size (depends on the version and sitekey but "invisible" for Invisible reCAPTCHA and "normal" or "compact" for reCAPTCHA v2).
