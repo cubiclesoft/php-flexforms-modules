@@ -13,6 +13,8 @@
 		{
 			if (isset($field["previewurl"]) && $field["previewurl"])
 			{
+				if ($field["type"] === "table")  $id .= "_table";
+
 				if ($state["modules_previewurl"] === false)
 				{
 					$state["css"]["modules-previewurl"] = array("mode" => "link", "dependency" => false, "src" => $state["supporturl"] . "/jquery.previewurl.css");
