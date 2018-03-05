@@ -11,7 +11,7 @@
 
 		public static function FieldType(&$state, $num, &$field, $id)
 		{
-			if ($field["type"] === "password" && isset($field["passwordmanager"]) && !$field["passwordmanager"])
+			if (($field["type"] === "password" || $field["type"] === "text") && isset($field["passwordmanager"]) && !$field["passwordmanager"])
 			{
 				if ($state["modules_passwordmanager"] === false)
 				{
