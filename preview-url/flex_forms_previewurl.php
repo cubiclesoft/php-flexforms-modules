@@ -50,6 +50,16 @@
 <?php
 					}
 				}
+
+				// Support for table cards and other modules that modify tables.
+				if ($field["type"] === "table")
+				{
+?>
+				jQuery('#<?php echo FlexForms::JSSafe($id); ?>').on('table:columnschanged', function() {
+					jQuery('#<?php echo FlexForms::JSSafe($id); ?>').closest('.formitem').find('[data-preview-type]').PreviewURL(options);
+				});
+<?php
+				}
 ?>
 
 				jQuery('#<?php echo FlexForms::JSSafe($id); ?>').closest('.formitem').find('[data-preview-type]').PreviewURL(options);
