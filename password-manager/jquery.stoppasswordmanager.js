@@ -19,6 +19,7 @@
 			$this.blur(function() {
 				$this.css('background-color', $this.css('color'));
 				$this.attr('type', 'text');
+				$this[0].selectionStart = $this[0].selectionEnd;
 			});
 		});
 	}
