@@ -39,7 +39,7 @@
 				$options["postvars"]["remoteip"] = $remoteip;
 			}
 
-			$result = $web->Process("https://www.google.com/recaptcha/api/siteverify", "auto", $options);
+			$result = $web->Process("https://www.google.com/recaptcha/api/siteverify", $options);
 			if (!$result["success"])  return array("success" => false, "error" => FlexForms::FFTranslate("An error occurred while validating the reCAPTCHA response.  Try again in a bit."), "errorcode" => "server_communication_error", "info" => $result);
 
 			$result2 = @json_decode($result["body"], true);
