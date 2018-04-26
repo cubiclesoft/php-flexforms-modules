@@ -17,7 +17,7 @@
 
 ?>
 <div class="formitemdata">
-	<div class="chartitemwrap"<?php if (isset($field["width"]))  echo " style=\"" . ($this->state["responsive"] ? "max-" : "") . "width: " . htmlspecialchars($field["width"]) . "\""; ?>>
+	<div class="chartitemwrap"<?php if (isset($field["width"]))  echo " style=\"" . ($state["responsive"] ? "max-" : "") . "width: " . htmlspecialchars($field["width"]) . "\""; ?>>
 		<div id="<?php echo htmlspecialchars($id); ?>"></div>
 	</div>
 </div>
