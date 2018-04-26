@@ -5,6 +5,8 @@ Official PHP modules for [FlexForms](https://github.com/cubiclesoft/php-flexform
 
 Formerly called Admin Pack Modules.  The modules in this repository extend [FlexForms](https://github.com/cubiclesoft/php-flexforms) and also [Admin Pack](https://github.com/cubiclesoft/admin-pack).
 
+[![Donate](https://cubiclesoft.com/res/donate-shield.png)](https://cubiclesoft.com/donate/)
+
 Features
 --------
 
