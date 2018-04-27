@@ -122,6 +122,58 @@ FlexForms.modules.c3_charts = {};
 				ob_end_clean();
 			}
 		}
+
+		function GetLinearRegression($xvals, $yvals, $calcpoints = true)
+		{
+			// Calculate:  y = a + bx
+			// Where:
+			//   N = Total number of elements
+			//   Sxy = SUM(x * y) - ((SUM(x) * SUM(y)) / N)
+			//   Sxx = SUM(x * x) - ((SUM(x) * SUM(x)) / N)
+			//   Syy = SUM(y * y) - ((SUM(y) * SUM(y)) / N)
+			//   b = Sxy / Sxx
+			//   a = (SUM(y) - (b * SUM(x))) / N
+			//   r = Sxy / SQRT(Sxx * Syy)
+			$n = count($xvals);
+			if (!$n || $n != count($yvals))  return false;
+
+			$Ex = 0;
+			$Ey = 0;
+			$Exy = 0;
+			$Exx = 0;
+			$Eyy = 0;
+			foreach ($xvals as $num => $xval)
+			{
+				if (!isset($yvals[$num]))  return false;
+				$yval = $yvals[$num];
+
+				$Ex += $xval;
+				$Ey += $yval;
+				$Exy += $xval * $yval;
+				$Exx += $xval * $xval;
+				$Eyy += $yval * $yval;
+			}
+
+			$Sxy = $Exy - ($Ex * $Ey / $n);
+			$Sxx = $Exx - ($Ex * $Ex / $n);
+			$Syy = $Eyy - ($Ey * $Ey / $n);
+
+			$b = $Sxy / $Sxx;
+			$a = ($Ey - ($b * $Ex)) / $n;
+			$r = $Sxy / sqrt($Sxx * $Syy);
+
+			if (!$calcpoints)  $points = false;
+			else
+			{
+				$points = array();
+				foreach ($xvals as $xval)
+				{
+					$points[] = $a + ($b * $xval);
+				}
+			}
+
+			return array("a" => $a, "b" => $b, "r" => $r, "points" => $points);
+		}
 	}
 
 	// Register form handlers.
