@@ -24,8 +24,8 @@
 				$options = array(
 					"selector" => "#" . $id,
 					"menubar" => false,
-					"plugins" => "lists link paste contextmenu textpattern autolink autoresize",
-					"toolbar" => "bold italic superscript subscript | undo redo paste | link numlist bullist indent outdent | formatselect blockquote",
+					"plugins" => "lists link contextmenu textpattern autolink autoresize",
+					"toolbar" => "bold italic superscript subscript | undo redo | link numlist bullist indent outdent | formatselect blockquote",
 					"autoresize_max_height" => 600,
 					"autoresize_bottom_margin" => 0,
 					"content_css" => array(
