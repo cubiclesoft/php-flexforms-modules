@@ -4,6 +4,22 @@
 
 	class FlexForms_Stripe
 	{
+		public static function GetBrandMap()
+		{
+			$brandmap = array(
+				"visa" => array("name" => "Visa", "img" => "visa_28x18.png", "css" => "stripecard-visa"),
+				"mastercard" => array("name" => "Mastercard", "img" => "mastercard_28x18.png", "css" => "stripecard-mastercard"),
+				"amex" => array("name" => "American Express", "img" => "amex_28x18.png", "css" => "stripecard-amex"),
+				"discover" => array("name" => "Discover", "img" => "discover_28x18.png", "css" => "stripecard-discover"),
+				"diners" => array("name" => "Diners Club", "img" => "diners_club_28x18.png", "css" => "stripecard-diners_club"),
+				"jcb" => array("name" => "JCB", "img" => "jcb_28x18.png", "css" => "stripecard-jcb"),
+				"unionpay" => array("name" => "UnionPay", "img" => "unionpay_28x18.png", "css" => "stripecard-unionpay"),
+				"" => array("name" => "Other", "img" => "card_front_28x18.png", "css" => "stripecard-card_front")
+			);
+
+			return $brandmap;
+		}
+
 		public static function Init(&$state, &$options)
 		{
 			if (!isset($state["modules_stripe"]))  $state["modules_stripe"] = false;
@@ -88,6 +104,8 @@
 			if (msg !== '')  jQuery('#<?php echo FlexForms::JSSafe($id); ?>').closest('.formitem').append('<div class="formitemresult"><div class="formitemerror">' + EscapeHTML(msg) + '</div></div>');
 		};
 
+		var brandmap = <?php echo json_encode(self::GetBrandMap(), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); ?>;
+
 		if (window.Stripe)
 		{
 			var stripe = new Stripe('<?php echo FlexForms::JSSafe($field["pubkey"]); ?>', <?php echo json_encode($options, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES); ?>);
@@ -121,14 +139,7 @@
 					{
 						$elem.removeClass(currbrand);
 
-						if (e.brand === 'visa')  currbrand = 'stripecard-visa';
-						else if (e.brand === 'mastercard')  currbrand = 'stripecard-mastercard';
-						else if (e.brand === 'amex')  currbrand = 'stripecard-amex';
-						else if (e.brand === 'discover')  currbrand = 'stripecard-discover';
-						else if (e.brand === 'diners')  currbrand = 'stripecard-diners_club';
-						else if (e.brand === 'jcb')  currbrand = 'stripecard-jcb';
-						else if (e.brand === 'unionpay')  currbrand = 'stripecard-unionpay';
-						else  currbrand = 'stripecard-card_front';
+						currbrand = (brandmap[e.brand] ? brandmap[e.brand].css : brandmap[''].css);
 
 						$elem.addClass(currbrand);
 					}
