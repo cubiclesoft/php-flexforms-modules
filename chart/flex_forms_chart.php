@@ -123,7 +123,7 @@ FlexForms.modules.c3_charts = {};
 			}
 		}
 
-		function GetLinearRegression($xvals, $yvals, $calcpoints = true)
+		public static function GetLinearRegression($xvals, $yvals, $calcpoints = true)
 		{
 			// Calculate:  y = a + bx
 			// Where:
@@ -160,7 +160,8 @@ FlexForms.modules.c3_charts = {};
 
 			$b = $Sxy / $Sxx;
 			$a = ($Ey - ($b * $Ex)) / $n;
-			$r = $Sxy / sqrt($Sxx * $Syy);
+			$r = sqrt($Sxx * $Syy);
+			$r = ($r == 0 ? 1 : $Sxy / $r);
 
 			if (!$calcpoints)  $points = false;
 			else
