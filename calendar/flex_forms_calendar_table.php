@@ -1,6 +1,6 @@
 <?php
 	// Add one or more calendar months using table fields.
-	// (C) 2017 CubicleSoft.  All Rights Reserved.
+	// (C) 2022 CubicleSoft.  All Rights Reserved.
 
 	function FF_AddCalendarMonthTableFields(&$contentopts, $startyear, $startmonth, $endyear, $endmonth, $cols, $data = array(), $monthcallback = "", $daycallback = "")
 	{
@@ -89,7 +89,7 @@
 						{
 							// Replace this field with one or more tables containing monthly calendar data.
 							$contentopts = array("fields" => array());
-							FF_AddCalendarMonthTableFields($contentopts, (isset($field["startyear"]) ? $field["startyear"] : date("Y")), (isset($field["startmonth"]) ? $field["startmonth"] : date("n")), (isset($field["startyear"]) ? $field["startyear"] : date("Y")), (isset($field["endmonth"]) ? $field["endmonth"] : date("n")), (isset($field["cols"]) ? $field["cols"] : array("S", "M", "T", "W", "T", "F", "S")), (isset($field["data"]) ? $field["data"] : array()), (isset($field["monthcallback"]) ? $field["monthcallback"] : ""), (isset($field["daycallback"]) ? $field["daycallback"] : ""));
+							FF_AddCalendarMonthTableFields($contentopts, (isset($field["startyear"]) ? $field["startyear"] : date("Y")), (isset($field["startmonth"]) ? $field["startmonth"] : date("n")), (isset($field["endyear"]) ? $field["endyear"] : date("Y")), (isset($field["endmonth"]) ? $field["endmonth"] : date("n")), (isset($field["cols"]) ? $field["cols"] : array("S", "M", "T", "W", "T", "F", "S")), (isset($field["data"]) ? $field["data"] : array()), (isset($field["monthcallback"]) ? $field["monthcallback"] : ""), (isset($field["daycallback"]) ? $field["daycallback"] : ""));
 
 							if (isset($field["title"]))  $contentopts["fields"][0]["title"] = $field["title"];
 							if (isset($field["desc"]))  $contentopts["fields"][count($contentopts["fields"]) - 1]["desc"] = $field["desc"];
