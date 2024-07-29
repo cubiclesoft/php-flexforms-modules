@@ -74,7 +74,7 @@ New type-specific options for array fields:
 * filter (table + Table Filter) - A boolean indicating whether or not to enable the table filter module on the table.
 * filter_options (table + Table Filter) - An array of options to pass to [FilterTable](https://github.com/sunnywalker/jQuery.FilterTable).
 * filter_callbacks (table + Table Filter) - An array of Javascript callbacks to pass to [FilterTable](https://github.com/sunnywalker/jQuery.FilterTable).
-* counter (text/textarea + Text Counter) - A boolean of true or an integer containing the limit on the number of characters to allow.
+* counter (text/textarea + Text Counter) - A boolean of true, an integer, or an array of 'min' and 'max' options containing the limit on the number of characters to allow.
 * counter_options (text/textarea + Text Counter) - An array of options to pass to [TextCounter](https://github.com/cubiclesoft/php-flexforms-modules/tree/master/text-counter/jquery.textcounter.js).
 * counter_callbacks (text/textarea + Text Counter) - An array of Javascript callbacks to pass to [TextCounter](https://github.com/cubiclesoft/php-flexforms-modules/tree/master/text-counter/jquery.textcounter.js).
 

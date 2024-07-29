@@ -1,5 +1,5 @@
-// jQuery plugin to display a character count in text boxes.
-// (C) 2017 CubicleSoft.  All Rights Reserved.
+// jQuery plugin to display a character/word count of text in text boxes.
+// (C) 2024 CubicleSoft.  All Rights Reserved.
 
 (function($) {
 	$.fn.TextCounter = function(options) {
@@ -21,7 +21,7 @@
 
 		if (typeof(options) === 'string' && options === 'destroy')  return this;
 
-		var settings = $.extend({ 'target' : null }, $.fn.TextCounter.defaults, options);
+		var settings = $.extend({ 'target' : null, 'valueCallback' : null }, $.fn.TextCounter.defaults, options);
 
 		return this.each(function() {
 			var $this = $(this);
@@ -30,13 +30,27 @@
 			if (settings.target === null)  $this.data('textcountertarget', dest);
 
 			var CounterHandler = function(e) {
-				var val = $this.val();
+				var val = (settings.valueCallback ? settings.valueCallback($this) : $this.val());
 				var vallen = (settings.unit === 'words' ? val.split(/\s+/).length : val.length);
-				var valid = (settings.limit == 0 || vallen <= settings.limit);
 
 				dest.removeClass(settings.okayClass).removeClass(settings.errorClass);
-				dest.addClass(valid ? settings.okayClass : settings.errorClass);
-				dest.html((valid ? '' : settings.errorMsg + '  ') + (vallen == 1 ? settings.mainMsgOne : settings.mainMsg).replace('{x}', vallen).replace('{y}', settings.limit));
+
+				if (typeof(settings.limit) === 'number')
+				{
+					var valid = (settings.limit == 0 || vallen <= settings.limit);
+
+					dest.addClass(valid ? settings.okayClass : settings.errorClass);
+					dest.html((valid ? '' : settings.errorMsg + '  ') + (vallen == 1 ? settings.mainMsgOne : settings.mainMsg).replace('{x}', vallen).replace('{y}', settings.limit));
+				}
+				else
+				{
+					var valid = (vallen >= settings.limit.min && vallen <= settings.limit.max);
+
+					var limitdisp = settings.limitRangeMsg.replace('{min}', settings.limit.min).replace('{max}', settings.limit.max);
+
+					dest.addClass(valid ? settings.okayClass : settings.errorClass);
+					dest.html((valid ? '' : (vallen < settings.limit.min ? settings.errorLowerMsg : settings.errorMsg) + '  ') + (vallen == 1 ? settings.mainMsgOne : settings.mainMsg).replace('{x}', vallen).replace('{y}', limitdisp));
+				}
 			};
 
 			$this.on('keydown.textcounter', CounterHandler).on('keyup.textcounter', CounterHandler).on('change.textcounter', CounterHandler).change();
@@ -48,8 +62,10 @@
 		'unit' : 'characters',
 		'okayClass' : 'textcounter_okay',
 		'errorClass' : 'textcounter_error',
+		'limitRangeMsg' : '{min} to {max}',
 		'mainMsg' : '{x} of {y} characters entered.',
 		'mainMsgOne' : '{x} of {y} characters entered.',
-		'errorMsg' : 'Too many characters entered.'
+		'errorMsg' : 'Too many characters entered.',
+		'errorLowerMsg' : 'Too few characters entered.'
 	};
 }(jQuery));

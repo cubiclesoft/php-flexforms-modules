@@ -1,6 +1,6 @@
 <?php
 	// Add a text counter option to text elements.
-	// (C) 2017 CubicleSoft.  All Rights Reserved.
+	// (C) 2024 CubicleSoft.  All Rights Reserved.
 
 	class FlexForms_TextCounter
 	{
@@ -11,7 +11,7 @@
 
 		public static function FieldType(&$state, $num, &$field, $id)
 		{
-			if (($field["type"] === "text" || $field["type"] === "textarea") && isset($field["counter"]) && (is_int($field["counter"]) || $field["counter"]))
+			if (($field["type"] === "text" || $field["type"] === "textarea") && isset($field["counter"]) && (is_int($field["counter"]) || (is_array($field["counter"]) && isset($field["counter"]["min"]) && isset($field["counter"]["max"])) || (bool)$field["counter"]))
 			{
 				// Alter the field.
 				if (isset($field["desc"]))
@@ -37,7 +37,7 @@
 					"target" => "#" . $id . "_textcounter"
 				);
 
-				if (is_int($field["counter"]))  $options["limit"] = $field["counter"];
+				if (is_int($field["counter"]) || is_array($field["counter"]))  $options["limit"] = $field["counter"];
 
 				// Allow each TextCounter instance to be fully customized beyond basic support.
 				// Valid options:  See 'jquery.textcounter.js' file.
